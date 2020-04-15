@@ -1,5 +1,5 @@
 import tkinter as tk
-from glob import glob
+import os
 from style import fnt, ACTIVE_BG, BG, FG, ACCENT
 
 class Option(tk.Checkbutton):
@@ -27,6 +27,7 @@ class Option(tk.Checkbutton):
 class Selector(tk.Frame):
     def __init__(self, parent, folder):
         super().__init__(parent, bg=BG)
+
         title = tk.Label(self, font=fnt(10), text=f' Select {folder} ', fg=FG, bg=ACCENT)
         title.pack(anchor=tk.W)
         
@@ -34,8 +35,13 @@ class Selector(tk.Frame):
         option_frame = tk.Frame(self, bg=BG, borderwidth=2, relief=tk.RIDGE)
         option_frame.pack(fill=tk.X)
         
-        # Create all option checkbuttons
-        self.options = [Option(option_frame, filename) for filename in glob(f'{folder}/*')]       
+        # Get path to the folder this module resides in
+        folder_path = os.path.join(os.path.dirname(__file__), folder)
+
+        # Create all option checkbuttons, providing an absolute path to each file
+        self.options = [Option(option_frame, os.path.join(folder_path, filename))
+                for filename in os.listdir(folder_path)]       
+
         # Place all checkbuttons
         [option.pack(anchor=tk.W) for option in self.options]
 
