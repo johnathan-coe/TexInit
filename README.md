@@ -2,6 +2,8 @@
 
 A simple GUI for generating TeX boilerplate.
 
+![Application Screenshot](TexInit.png)
+
 The application pulls snippets from the 'Classes', 'Packages' and 'Samples'
 folder, allowing the user to select those applicable. Creation
 of a document will assemble these into a .tex file.
