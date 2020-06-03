@@ -1,11 +1,17 @@
+#!/usr/bin/python
 import tkinter as tk
 from widgets import Selector
 from tkinter import filedialog
 from style import ACCENT, FG, BG, fnt
+import sys
+
+# Filename from commandline
+ARGFILENAME = sys.argv[1] if 1 < len(sys.argv) else ""
 
 class TexInit(tk.Tk):
     def __init__(self):
         super().__init__()
+
         self.config(bg=BG)
         
         title = tk.Label(self, text=' TexInit by JeJ ', font=fnt(20), bg=ACCENT, fg=FG)
@@ -19,16 +25,21 @@ class TexInit(tk.Tk):
 
         self.samples = Selector(self, "Samples")
         self.samples.pack(fill=tk.X, pady=(0, 10))
-
-        tk.Button(self, text="Create!",
+        
+        tk.Button(self, text=f"Create {ARGFILENAME}",
                 activeforeground=FG, fg=FG,
                 activebackground=ACCENT, bg=ACCENT,
                 font=fnt(10), command=self.make).pack(anchor=tk.W)
 
     def make(self):
-        output = filedialog.asksaveasfilename()
+        # Grab filename from command line arguments
+        output = ARGFILENAME
+         
+        if not output:
+            # Grab filename from dialog
+            output = filedialog.asksaveasfilename()
 
-        # Allow user to cancel from file dialog
+        # Cancel if we can't get either
         if not output:
             return
 
