@@ -7,6 +7,8 @@ import sys
 
 # Filename from commandline
 ARGFILENAME = sys.argv[1] if 1 < len(sys.argv) else ""
+# Sample directories
+SAMPLE_DIRS = ("Classes", "Packages", "Samples")
 
 class TexInit(tk.Tk):
     def __init__(self):
@@ -16,15 +18,10 @@ class TexInit(tk.Tk):
         
         title = tk.Label(self, text=' TexInit by JeJ ', font=fnt(20), bg=ACCENT, fg=FG)
         title.pack(anchor=tk.W, pady=(0, 10))
-
-        self.classes = Selector(self, "Classes")
-        self.classes.pack(fill=tk.X, pady=(0, 10))
         
-        self.packages = Selector(self, "Packages")
-        self.packages.pack(fill=tk.X, pady=(0, 10))
-
-        self.samples = Selector(self, "Samples")
-        self.samples.pack(fill=tk.X, pady=(0, 10))
+        # Create and display a selector for each specified directory
+        self.selectors = {cls: Selector(self, cls) for cls in SAMPLE_DIRS}
+        [selector.pack(fill=tk.X, pady=(0, 10)) for selector in self.selectors.values()]
         
         tk.Button(self, text=f"Create {ARGFILENAME}",
                 activeforeground=FG, fg=FG,
@@ -44,9 +41,9 @@ class TexInit(tk.Tk):
         if not output:
             return
 
-        classes = self.classes.make()
-        packages = self.packages.make()
-        samples = self.samples.make()
+        classes = self.selectors["Classes"].make()
+        packages = self.selectors["Packages"].make()
+        samples = self.selectors["Samples"].make()
         
         document = ''.join([classes, '\n', packages, '\n\\begin{document}\n',
                             samples, '\n\\end{document}\n'])
