@@ -37,7 +37,8 @@ class TexInit(tk.Tk):
          
         if not output:
             # Grab filename from dialog
-            output = filedialog.asksaveasfilename()
+            output = filedialog.asksaveasfilename(title="Output File",
+                    filetypes=(("LaTeX File", "*.tex"),))
 
         # Cancel if we can't get either
         if not output:
