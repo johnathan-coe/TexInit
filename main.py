@@ -3,12 +3,15 @@ import tkinter as tk
 from widgets import Selector
 from tkinter import filedialog
 from style import ACCENT, FG, BG, fnt
-import sys
+import os
+import sys 
 
 # Filename from commandline
 ARGFILENAME = sys.argv[1] if 1 < len(sys.argv) else ""
-# Sample directories
-SAMPLE_DIRS = ("Classes", "Packages", "Samples")
+# Snippet directories
+SNIPPET_DIRS = ("Classes", "Packages", "Samples")
+# Template file
+TEMPLATE = os.path.join(os.path.dirname(__file__), "template.tex")
 
 class TexInit(tk.Tk):
     def __init__(self):
@@ -20,7 +23,7 @@ class TexInit(tk.Tk):
         title.pack(anchor=tk.W, pady=(0, 10))
         
         # Create and display a selector for each specified directory
-        self.selectors = {cls: Selector(self, cls) for cls in SAMPLE_DIRS}
+        self.selectors = {cls: Selector(self, cls) for cls in SNIPPET_DIRS}
         [selector.pack(fill=tk.X, pady=(0, 10)) for selector in self.selectors.values()]
         
         tk.Button(self, text=f"Create {ARGFILENAME}",
@@ -40,16 +43,20 @@ class TexInit(tk.Tk):
         # Cancel if we can't get either
         if not output:
             return
+    
+        template = ""
+        # Pull template from file
+        with open("template.tex", "r") as f:
+            template = f.read()
+            
+        # Substitute in snippets
+        for directory in SNIPPET_DIRS:
+            template = template.replace("{{"+directory+"}}",
+                    self.selectors[directory].make())
 
-        classes = self.selectors["Classes"].make()
-        packages = self.selectors["Packages"].make()
-        samples = self.selectors["Samples"].make()
-        
-        document = ''.join([classes, '\n', packages, '\n\\begin{document}\n',
-                            samples, '\n\\end{document}\n'])
-
+        # Write to document
         with open(output, 'w') as f:
-            f.write(document)
+            f.write(template)
 
         self.destroy()
 
