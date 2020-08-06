@@ -46,7 +46,7 @@ class TexInit(tk.Tk):
     
         template = ""
         # Pull template from file
-        with open("template.tex", "r") as f:
+        with open(TEMPLATE, "r") as f:
             template = f.read()
             
         # Substitute in snippets
