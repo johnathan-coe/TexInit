@@ -9,7 +9,7 @@ import sys
 # Filename from commandline
 ARGFILENAME = sys.argv[1] if 1 < len(sys.argv) else ""
 # Snippet directories
-SNIPPET_DIRS = ("Classes", "Packages", "Samples")
+SNIPPET_DIRS = ("Classes", "Packages", "Options", "Samples")
 # Template file
 TEMPLATE = os.path.join(os.path.dirname(__file__), "template.tex")
 
